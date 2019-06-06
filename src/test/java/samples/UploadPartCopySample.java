@@ -19,27 +19,15 @@
 
 package samples;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.CompleteMultipartUploadRequest;
-import com.aliyun.oss.model.GetObjectRequest;
-import com.aliyun.oss.model.InitiateMultipartUploadRequest;
-import com.aliyun.oss.model.InitiateMultipartUploadResult;
-import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PartETag;
-import com.aliyun.oss.model.PutObjectRequest;
-import com.aliyun.oss.model.UploadPartCopyRequest;
-import com.aliyun.oss.model.UploadPartCopyResult;
+import com.aliyun.oss.model.*;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This sample demonstrates how to upload parts by copy mode 

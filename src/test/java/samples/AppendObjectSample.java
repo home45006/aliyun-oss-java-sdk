@@ -19,29 +19,21 @@
 
 package samples;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.GetObjectRequest;
+import com.aliyun.oss.model.AppendObjectRequest;
+import com.aliyun.oss.model.AppendObjectResult;
 import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.PutObjectRequest;
+
+import java.io.*;
 
 /**
- * This sample demonstrates how to upload/download an object to/from 
- * Aliyun OSS using the OSS SDK for Java.
+ * This sample demonstrates how to upload an object by append mode 
+ * to Aliyun OSS using the OSS SDK for Java.
  */
-public class SimpleGetObjectSample {
+public class AppendObjectSample {
     
     private static String endpoint = "*** Provide OSS endpoint ***";
     private static String accessKeyId = "*** Provide your AccessKeyId ***";
@@ -50,39 +42,50 @@ public class SimpleGetObjectSample {
     private static String bucketName = "*** Provide bucket name ***";
     private static String key = "*** Provide key ***";
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {        
         /*
          * Constructs a client instance with your account for accessing OSS
          */
         OSS client = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         
-        try {
-            
-            /**
-             * Note that there are two ways of uploading an object to your bucket, the one 
-             * by specifying an input stream as content source, the other by specifying a file.
-             */
-            
+        try {            
             /*
-             * Upload an object to your bucket from an input stream
+             * Append an object from specfied input stream, keep in mind that
+             * position should be set to zero at first time.
              */
-            System.out.println("Uploading a new object to OSS from an input stream\n");
             String content = "Thank you for using Aliyun Object Storage Service";
-            client.putObject(bucketName, key, new ByteArrayInputStream(content.getBytes()));
+            InputStream instream = new ByteArrayInputStream(content.getBytes());
+            Long firstPosition = 0L;
+            System.out.println("Begin to append object at position(" + firstPosition + ")");
+            AppendObjectResult appendObjectResult = client.appendObject(
+                    new AppendObjectRequest(bucketName, key, instream).withPosition(0L));
+            System.out.println("\tNext position=" + appendObjectResult.getNextPosition() + 
+                    ", CRC64=" + appendObjectResult.getObjectCRC() + "\n");
             
             /*
-             * Upload an object to your bucket from a file
+             * Continue to append the object from specfied file descriptor at last position
              */
-            System.out.println("Uploading a new object to OSS from a file\n");
-            client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
+            Long nextPosition = appendObjectResult.getNextPosition();
+            System.out.println("Continue to append object at last position(" + nextPosition + "):");
+            appendObjectResult = client.appendObject(
+                    new AppendObjectRequest(bucketName, key, createTempFile())
+                    .withPosition(nextPosition));
+            System.out.println("\tNext position=" + appendObjectResult.getNextPosition() + 
+                    ", CRC64=" + appendObjectResult.getObjectCRC());
             
             /*
-             * Download an object from your bucket
+             * View object type of the appendable object
              */
-            System.out.println("Downloading an object");
-            OSSObject object = client.getObject(new GetObjectRequest(bucketName, key));
-            System.out.println("Content-Type: "  + object.getObjectMetadata().getContentType());
-            displayTextInputStream(object.getObjectContent());
+            OSSObject object = client.getObject(bucketName, key);
+            System.out.println("\tObject type=" + object.getObjectMetadata().getObjectType() + "\n");
+            // Do not forget to close object input stream if not use it any more
+            object.getObjectContent().close();
+            
+            /*
+             * Delete the appendable object
+             */
+            System.out.println("Deleting an appendable object");
+            client.deleteObject(bucketName, key);
             
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
@@ -104,7 +107,7 @@ public class SimpleGetObjectSample {
         }
     }
     
-    private static File createSampleFile() throws IOException {
+    private static File createTempFile() throws IOException {
         File file = File.createTempFile("oss-java-sdk-", ".txt");
         file.deleteOnExit();
 
@@ -115,18 +118,4 @@ public class SimpleGetObjectSample {
 
         return file;
     }
-
-    private static void displayTextInputStream(InputStream input) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        while (true) {
-            String line = reader.readLine();
-            if (line == null) break;
-
-            System.out.println("\t" + line);
-        }
-        System.out.println();
-
-        reader.close();
-    }
-    
 }

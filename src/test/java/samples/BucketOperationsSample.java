@@ -19,32 +19,18 @@
 
 package samples;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.UUID;
-
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.AccessControlList;
-import com.aliyun.oss.model.BucketLoggingResult;
-import com.aliyun.oss.model.BucketReferer;
-import com.aliyun.oss.model.BucketWebsiteResult;
-import com.aliyun.oss.model.CannedAccessControlList;
-import com.aliyun.oss.model.LifecycleRule;
+import com.aliyun.oss.model.*;
 import com.aliyun.oss.model.LifecycleRule.RuleStatus;
-import com.aliyun.oss.model.SetBucketCORSRequest;
 import com.aliyun.oss.model.SetBucketCORSRequest.CORSRule;
-import com.aliyun.oss.model.SetBucketLifecycleRequest;
-import com.aliyun.oss.model.SetBucketLoggingRequest;
-import com.aliyun.oss.model.SetBucketWebsiteRequest;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * This sample demonstrates how to do bucket-related operations

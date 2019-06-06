@@ -19,11 +19,9 @@
 
 package samples;
 
-import com.aliyun.oss.event.ProgressEvent;
-import com.aliyun.oss.event.ProgressListener;
-import com.aliyun.oss.model.*;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.*;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;

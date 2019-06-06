@@ -19,15 +19,7 @@
 
 package samples;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import com.aliyun.oss.ClientException;
-import com.aliyun.oss.InconsistentException;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.OSSException;
+import com.aliyun.oss.*;
 import com.aliyun.oss.common.utils.IOUtils;
 import com.aliyun.oss.internal.OSSUtils;
 import com.aliyun.oss.model.AppendObjectRequest;
@@ -35,6 +27,10 @@ import com.aliyun.oss.model.AppendObjectResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.UploadFileRequest;
 import junit.framework.Assert;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Examples about how to enable and check CRC for uploading and downloading data.

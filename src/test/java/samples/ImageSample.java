@@ -19,25 +19,25 @@
 
 package samples;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.GetObjectRequest;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Image process examples.
  *
  */
 public class ImageSample {
-    
-    private static String endpoint = "<endpoint, http://oss-cn-hangzhou.aliyuncs.com>";
-    private static String accessKeyId = "<accessKeyId>";
-    private static String accessKeySecret = "<accessKeySecret>";
-    private static String bucketName = "<bucketName>";
+
+    private static String endpoint = "oss-cn-beijing.aliyuncs.com";
+    private static String accessKeyId = "LTAIEQzeEsyi11nw";
+    private static String accessKeySecret = "Eas5yx2p4qon00n5wJ6bLTVhBDdJQy";
+    private static String bucketName = "rice";
     private static String key = "example.jpg";
     
     

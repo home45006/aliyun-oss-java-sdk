@@ -19,55 +19,51 @@
 
 package samples;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.DownloadFileRequest;
+import com.aliyun.oss.model.DownloadFileResult;
 import com.aliyun.oss.model.ObjectMetadata;
 
+import java.io.IOException;
+
 /**
- * Examples about metadata information get and set.
- * 
+ * The examples about how to enable checkpoint in downloading.
+ *
  */
-public class ObjectMetaSample {
+public class DownloadSample {
+
+    private static String endpoint = "oss-cn-beijing.aliyuncs.com";
+    private static String accessKeyId = "LTAIEQzeEsyi11nw";
+    private static String accessKeySecret = "Eas5yx2p4qon00n5wJ6bLTVhBDdJQy";
+    private static String bucketName = "rice";
+    private static String key = "my-first-key";
+    private static String downloadFile = "logs/test.txt";
+   
     
-    private static String endpoint = "<endpoint, http://oss-cn-hangzhou.aliyuncs.com>";
-    private static String accessKeyId = "<accessKeyId>";
-    private static String accessKeySecret = "<accessKeySecret>";
-    private static String bucketName = "<bucketName>";
-    private static String key = "<key>";
-    private static String content = "Hello OSS";
-    
-    
-    public static void main(String[] args) throws IOException {
-        /*
-         * Constructs a client instance with your account for accessing OSS
-         */
+    public static void main(String[] args) throws IOException {        
+
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-                
+        
         try {
-            ObjectMetadata meta = new ObjectMetadata();
+            DownloadFileRequest downloadFileRequest = new DownloadFileRequest(bucketName, key);
+            // Sets the local file to download to
+            downloadFileRequest.setDownloadFile(downloadFile);
+            // Sets the concurrent task thread count 5. By default it's 1.
+            downloadFileRequest.setTaskNum(5);
+            // Sets the part size, by default it's 100K.
+            downloadFileRequest.setPartSize(1024 * 1024 * 1);
+            // Enable checkpoint. By default it's false.
+            downloadFileRequest.setEnableCheckpoint(true);
             
-            // Sets the content type.
-            meta.setContentType("text/plain");
-            // Sets the MD5 data---please update it with the actual value.
-            meta.setContentMD5("");
-            // Sets the custom metadata.
-            meta.addUserMetadata("meta", "meta-value");
+            DownloadFileResult downloadResult = ossClient.downloadFile(downloadFileRequest);
             
-            // Uploads the file
-            ossClient.putObject(bucketName, key, 
-                    new ByteArrayInputStream(content.getBytes()), meta);
-           
-            // Gets the object metadata information.
-            ObjectMetadata metadata = ossClient.getObjectMetadata(bucketName, key);
-            System.out.println(metadata.getContentType());
-            System.out.println(metadata.getLastModified());
-            System.out.println(metadata.getUserMetadata().get("meta")); 
-            
-            ossClient.deleteObject(bucketName, key);
+            ObjectMetadata objectMetadata = downloadResult.getObjectMetadata();
+            System.out.println(objectMetadata.getETag());
+            System.out.println(objectMetadata.getLastModified());
+            System.out.println(objectMetadata.getUserMetadata().get("meta"));
             
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
@@ -81,12 +77,10 @@ public class ObjectMetaSample {
                     + "a serious internal problem while trying to communicate with OSS, "
                     + "such as not being able to access the network.");
             System.out.println("Error Message: " + ce.getMessage());
+        } catch (Throwable e) {
+            e.printStackTrace();
         } finally {
-            /*
-             * Do not forget to shut down the client finally to release all allocated resources.
-             */
             ossClient.shutdown();
         }
     }
-    
 }

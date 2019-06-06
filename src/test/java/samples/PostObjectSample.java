@@ -19,10 +19,11 @@
 
 package samples;
 
+import org.apache.commons.codec.binary.Base64;
+
 import javax.activation.MimetypesFileTypeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import org.apache.commons.codec.binary.Base64;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
