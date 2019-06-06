@@ -34,13 +34,13 @@ import java.io.IOException;
  *
  */
 public class UploadSample {
-    
-    private static String endpoint = "<endpoint, http://oss-cn-hangzhou.aliyuncs.com>";
-    private static String accessKeyId = "<accessKeyId>";
-    private static String accessKeySecret = "<accessKeySecret>";
-    private static String bucketName = "<bucketName>";
-    private static String key = "<downloadKey>";
-    private static String uploadFile = "<uploadFile>";
+
+    private static String endpoint = "oss-cn-beijing.aliyuncs.com";
+    private static String accessKeyId = "LTAIEQzeEsyi11nw";
+    private static String accessKeySecret = "Eas5yx2p4qon00n5wJ6bLTVhBDdJQy";
+    private static String bucketName = "rice";
+    private static String key = "test.png";
+    private static String uploadFile = "111.png";
 
     public static void main(String[] args) throws IOException {        
 
