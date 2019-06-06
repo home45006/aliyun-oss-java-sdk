@@ -33,12 +33,11 @@ import java.io.IOException;
  * specfied bucket to Aliyun OSS using the OSS SDK for Java.
  */
 public class CreateFolderSample {
-    
-    private static String endpoint = "*** Provide OSS endpoint ***";
-    private static String accessKeyId = "*** Provide your AccessKeyId ***";
-    private static String accessKeySecret = "*** Provide your AccessKeySecret ***";
 
-    private static String bucketName = "*** Provide bucket name ***";
+    private static String endpoint = "oss-cn-beijing.aliyuncs.com";
+    private static String accessKeyId = "LTAIEQzeEsyi11nw";
+    private static String accessKeySecret = "Eas5yx2p4qon00n5wJ6bLTVhBDdJQy";
+    private static String bucketName = "rice";
 
     public static void main(String[] args) throws IOException {        
         /*
